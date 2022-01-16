@@ -6,6 +6,12 @@ name = "pypi"
 [packages]
 
 [dev-packages]
+yapf = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.9"
+
+[scripts]
+format = "yapf -r -i ./handler.py"
+lint = "flake8 --show-source ./handler.py"
