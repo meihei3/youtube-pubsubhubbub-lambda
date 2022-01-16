@@ -1,24 +1,30 @@
 import json
+import logging
+import os
 
 
-def hello(event, context):
-    body = {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "input": event
-    }
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(body)
-    }
+# 検証用のキー
+VERIFY_TOKEN = os.getenv("PuSH_verify_token")
+HMAC_SECRET = os.getenv("PuSH_hmac_secret")
 
-    return response
 
-    # Use this code if you don't use the http event with the LAMBDA-PROXY
-    # integration
+def challenge(event, context):
     """
+    GET /hub
+    """
+    params: dict = event.get("queryStringParameters")
+
+    if params.get("hub.verify_token", "") != VERIFY_TOKEN:
+        logger.info(params)
+        return {
+            "statusCode": 403,
+            "body": ""
+        }
+
     return {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "event": event
+        "statusCode": 200,
+        "body": params.get("hub.challenge", "")
     }
-    """
