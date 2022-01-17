@@ -8,6 +8,8 @@ name = "pypi"
 [dev-packages]
 yapf = "*"
 flake8 = "*"
+pytest = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.9"

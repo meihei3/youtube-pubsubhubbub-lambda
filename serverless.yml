@@ -28,7 +28,7 @@ provider:
 
 functions:
   challenge:
-    handler: handler.challenge
+    handler: handler.get_handler
     events:
       - httpApi:
           path: /hub
