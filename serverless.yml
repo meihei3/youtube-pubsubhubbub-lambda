@@ -35,7 +35,7 @@ functions:
           method: get
 
   notify:
-    handler: handler.notify
+    handler: handler.post_handler
     events:
       - httpApi:
           path: /hub

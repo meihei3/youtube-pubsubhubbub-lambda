@@ -24,3 +24,7 @@ def test_challenge():
     actual = handler.challenge(RequestChalenge(""))
     assert expected == actual.statusCode
 
+
+def test_validate_hmac():
+    assert handler.validate_hmac("0c94515c15e5095b8a87a50ba0df3bf38ed05fe6", "test", "test")
+    assert not handler.validate_hmac("1c94515c15e5095b8a87a50ba0df3bf38ed05fe6", "test", "test")
