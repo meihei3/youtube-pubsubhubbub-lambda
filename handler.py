@@ -90,7 +90,7 @@ def notify(req: RequestNotify) -> Response:
 
     logger.info(entry)
 
-    return Response(200, "")
+    return Response(200, "success")
 
 
 def validate_hmac(hub_signature: str, msg: str, key: str) -> bool:
