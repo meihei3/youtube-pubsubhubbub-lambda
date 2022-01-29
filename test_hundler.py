@@ -41,8 +41,8 @@ def test_parse():
         link="http://example.com/watch?v=test_videoId",
         authorName="test_author_name",
         authorUri="http://example.com/channel/test_channelId",
-        published=datetime(2022, 1, 28, 21, 40, 35).astimezone(dateutil_gettz('Asia/Tokyo')),
-        updated=datetime(2022, 1, 28, 21, 40, 58, 132027).astimezone(dateutil_gettz('Asia/Tokyo'))
+        published=datetime(2022, 1, 28, 21, 40, 35, tzinfo=dateutil_gettz('Asia/Tokyo')),
+        updated=datetime(2022, 1, 28, 21, 40, 58, 132027, tzinfo=dateutil_gettz('Asia/Tokyo'))
     )
     actual = handler.parse("""<?xml version='1.0' encoding='UTF-8'?>
 <feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns="http://www.w3.org/2005/Atom">
