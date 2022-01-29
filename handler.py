@@ -38,6 +38,7 @@ except:
 @dataclass(frozen=True)
 class RequestChalenge:
     verifyToken: str
+    challenge: str
 
 
 @dataclass(frozen=True)
@@ -71,7 +72,7 @@ def challenge(req: RequestChalenge) -> Response:
     if req.verifyToken != VERIFY_TOKEN:
         return Response(statusCode=404, body='{"message":"Not Found"}')
 
-    return Response(statusCode=200, body=req.verifyToken)
+    return Response(statusCode=200, body=req.challenge)
 
 
 def notify(req: RequestNotify) -> Response:
@@ -102,24 +103,30 @@ def parse(text: str) -> Entry:
     entry = root.find("atom:entry", XML_NAMESPACE)
     author = entry.find("atom:author", XML_NAMESPACE)
 
-    return Entry(
-        videoId = entry.find("yt:videoId", XML_NAMESPACE).text,
-        channelId = entry.find("yt:channelId", XML_NAMESPACE).text,
-        title = entry.find("atom:title", XML_NAMESPACE).text,
-        link = entry.find("atom:link", XML_NAMESPACE).get("href"),
-        authorName = author.find("atom:name", XML_NAMESPACE).text,
-        authorUri = author.find("atom:uri", XML_NAMESPACE).text,
-        published = dateutil_parse(entry.find("atom:published", XML_NAMESPACE).text).astimezone(dateutil_gettz('Asia/Tokyo')),
-        updated = dateutil_parse(entry.find("atom:updated", XML_NAMESPACE).text).astimezone(dateutil_gettz('Asia/Tokyo'))
-    )
+    return Entry(videoId=entry.find("yt:videoId", XML_NAMESPACE).text,
+                 channelId=entry.find("yt:channelId", XML_NAMESPACE).text,
+                 title=entry.find("atom:title", XML_NAMESPACE).text,
+                 link=entry.find("atom:link", XML_NAMESPACE).get("href"),
+                 authorName=author.find("atom:name", XML_NAMESPACE).text,
+                 authorUri=author.find("atom:uri", XML_NAMESPACE).text,
+                 published=dateutil_parse(
+                     entry.find("atom:published",
+                                XML_NAMESPACE).text).astimezone(
+                                    dateutil_gettz('Asia/Tokyo')),
+                 updated=dateutil_parse(
+                     entry.find("atom:updated",
+                                XML_NAMESPACE).text).astimezone(
+                                    dateutil_gettz('Asia/Tokyo')))
 
 
 def get_handler(event, context):
     """
     GET /hub
     """
-    params: dict = event.get("queryStringParameters")
-    req = RequestChalenge(verifyToken=params.get("hub.verify_token", ""))
+    logger.info(event)    # for debug
+    params: dict = event.get("queryStringParameters", "")
+    req = RequestChalenge(verifyToken=params.get("hub.verify_token", ""),
+                          challenge=params.get("hub.challenge", ""))
 
     res = challenge(req)
 
@@ -130,8 +137,9 @@ def post_handler(event, context):
     """
     POST /hub
     """
+    logger.info(event)    # for debug
     headers: dict = event.get("headers", {})
-    req = RequestNotify(signature=headers.get("x-hub-signature", ""),
+    req = RequestNotify(x_hub_signature=headers.get("x-hub-signature", ""),
                         body=event.get("body", ""))
 
     res = notify(req)
