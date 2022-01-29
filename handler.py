@@ -7,6 +7,7 @@ import hmac
 import logging
 import os
 import re
+import secrets
 import xml.etree.ElementTree as ET
 
 logger = logging.getLogger()
@@ -69,7 +70,7 @@ def challenge(req: RequestChalenge) -> Response:
     """
     challengeのロジック部分
     """
-    if req.verifyToken != VERIFY_TOKEN:
+    if not secrets.compare_digest(req.verifyToken, VERIFY_TOKEN):
         return Response(statusCode=404, body='{"message":"Not Found"}')
 
     return Response(statusCode=200, body=req.challenge)
