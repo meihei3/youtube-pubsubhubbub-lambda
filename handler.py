@@ -2,13 +2,13 @@ from dataclasses import dataclass, asdict
 from datetime import datetime
 from dateutil.parser import parse as dateutil_parse
 from dateutil.tz import gettz as dateutil_gettz
+import defusedxml.ElementTree as ET
 import hashlib
 import hmac
 import logging
 import os
 import re
 import secrets
-import xml.etree.ElementTree as ET
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
