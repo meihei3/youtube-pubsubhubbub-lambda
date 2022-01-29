@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python lint
+name: Python lint and test
 
 on:
   push:
@@ -25,9 +25,17 @@ jobs:
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv sync --dev
+    - name: Add dotenvs
+      run: |
+        # write environmental variables to ".env"
+        echo "PuSH_verify_token=test\n" >> .env
+        echo "PuSH_hmac_secret=test\n" >> .env
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
         pipenv run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude ./node_modules
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         pipenv run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --exclude ./node_modules
+    - name: Run pytest
+      run: |
+        pipenv run pytest
