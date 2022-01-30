@@ -1,4 +1,5 @@
 # YouTube pubsubhubbub lambda
+[![Python lint and test](https://github.com/meihei3/youtube-pubsubhubbub-lambda/actions/workflows/python-lint-and-test.yml/badge.svg)](https://github.com/meihei3/youtube-pubsubhubbub-lambda/actions/workflows/python-lint-and-test.yml)
 
 This application receives notifications from YouTube via PubSubHubBub and runs AWS Lambda.
 
