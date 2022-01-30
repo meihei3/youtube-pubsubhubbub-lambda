@@ -36,7 +36,7 @@ PuSH_hmac_secret=[your_push_hmac_secret]
 $ sls deploy
 ```
 
-## Udage
+## Usage
 
 ### Implement the your process
 
