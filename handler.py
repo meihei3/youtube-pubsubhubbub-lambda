@@ -88,9 +88,16 @@ def notify(req: RequestNotify) -> Response:
 
     entry = parse(req.body)
 
-    logger.info(entry)
+    action(entry)
 
     return Response(200, "success")
+
+
+def action(entry: Entry):
+    """
+    動画の通知が来たときに行う処理
+    """
+    logger.info(entry)
 
 
 def validate_hmac(hub_signature: str, msg: str, key: str) -> bool:

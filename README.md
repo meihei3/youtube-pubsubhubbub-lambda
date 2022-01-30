@@ -1,6 +1,8 @@
 # YouTube pubsubhubbub lambda
 
-This application receives a notification from YouTube via PubSubHubBub and runs AWS Lambda.
+This application receives notifications from YouTube via PubSubHubBub and runs AWS Lambda.
+
+For more information on how to use PubSubHubBub(PuSH) and how to receive notifications from YouTube, please refer to [here](https://developers.google.com/youtube/v3/guides/push_notifications).
 
 ## Require
 - pipenv
@@ -32,3 +34,9 @@ PuSH_hmac_secret=[your_push_hmac_secret]
 ```
 $ sls deploy
 ```
+
+## Udage
+
+### Implement the your process
+
+By rewriting the `action()` function, you can implement the original process.
