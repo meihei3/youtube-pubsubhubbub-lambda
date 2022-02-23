@@ -81,11 +81,13 @@ def notify(req: RequestNotify) -> Response:
     notifyのロジック部分
     """
     if not (m := X_HUB_SIGNATURE.match(req.x_hub_signature)):
-        logger.info('verification failed: X_HUB_SIGNATURE is not match.', req)
+        logger.info('verification failed: X_HUB_SIGNATURE is not match.')
+        logger.info(req)
         return Response(200, "success")  # チャレンジに失敗しても 2xx success response を返す
 
     if not validate_hmac(m.groups()[0], req.body, HMAC_SECRET):
-        logger.info('verification failed: hmac is not match.', req)
+        logger.info('verification failed: hmac is not match.')
+        logger.info(req)
         return Response(200, "success")  # チャレンジに失敗しても 2xx success response を返す
 
     entry = parse(req.body)

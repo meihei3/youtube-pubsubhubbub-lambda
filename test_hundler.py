@@ -70,18 +70,24 @@ def test_parse():
 
 def test_notify(mocker):
     req = RequestNotify("test_x_hub_signature", "")
-    expected = 403
+    expected = 200
     actual = handler.notify(req)
     assert expected == actual.statusCode
 
     req = RequestNotify("sha1=0000111122223333444455556666777788889999", "")
-    expected = 403
+    expected = 200
     actual = handler.notify(req)
     assert expected == actual.statusCode
 
     mocker.patch("handler.validate_hmac", return_value=True)
     mocker.patch("handler.parse", return_value="")
     expected = 200
+    req = RequestNotify("sha1=0000111122223333444455556666777788889999", "")
+    actual = handler.notify(req)
+    assert expected == actual.statusCode
+
+    mocker.patch("handler.action", side_effect=Exception)
+    expected = 500
     req = RequestNotify("sha1=0000111122223333444455556666777788889999", "")
     actual = handler.notify(req)
     assert expected == actual.statusCode
