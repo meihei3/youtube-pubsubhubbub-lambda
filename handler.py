@@ -81,14 +81,23 @@ def notify(req: RequestNotify) -> Response:
     notifyのロジック部分
     """
     if not (m := X_HUB_SIGNATURE.match(req.x_hub_signature)):
-        return Response(403, '{"message":"Forbidden"}')
+        logger.info('verification failed: X_HUB_SIGNATURE is not match.')
+        logger.info(req)
+        return Response(200, "success")  # チャレンジに失敗しても 2xx success response を返す
 
     if not validate_hmac(m.groups()[0], req.body, HMAC_SECRET):
-        return Response(403, '{"message":"Forbidden"}')
+        logger.info('verification failed: hmac is not match.')
+        logger.info(req)
+        return Response(200, "success")  # チャレンジに失敗しても 2xx success response を返す
 
     entry = parse(req.body)
 
-    action(entry)
+    try:
+        action(entry)
+    except Exception as e:
+        logger.error(e)
+        # 2xx success 以外で返すと配信が止まるという説もあるので、あえて 2xx success で返しても良さそう
+        return Response(500, "internal server error")
 
     return Response(200, "success")
 
