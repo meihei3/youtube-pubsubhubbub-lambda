@@ -90,7 +90,12 @@ def notify(req: RequestNotify) -> Response:
 
     entry = parse(req.body)
 
-    action(entry)
+    try:
+        action(entry)
+    except Exception as e:
+        logger.error(e)
+        # 2xx success 以外で返すと配信が止まるという説もあるので、あえて 2xx success で返しても良さそう
+        return Response(500, "internal server error")
 
     return Response(200, "success")
 
