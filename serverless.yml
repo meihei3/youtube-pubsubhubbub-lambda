@@ -23,7 +23,6 @@ provider:
   region: ap-northeast-1
   logRetentionInDays: 30
   environment:
-    PuSH_verify_token: ${env:PuSH_verify_token}
     PuSH_hmac_secret: ${env:PuSH_hmac_secret}
 
 functions:

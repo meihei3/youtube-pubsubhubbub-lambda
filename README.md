@@ -26,7 +26,6 @@ $ npm install
 ### 3. Wrtie .env
 
 ```
-PuSH_verify_token=[your_push_verify_token]
 PuSH_hmac_secret=[your_push_hmac_secret]
 ```
 
