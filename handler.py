@@ -134,7 +134,7 @@ def get_handler(event, context):
     GET /hub
     """
     logger.info(event)    # for debug
-    params: dict = event.get("queryStringParameters", "")
+    params: dict = event.get("queryStringParameters", {})
     req = RequestChalenge(challenge=params.get("hub.challenge", ""))
 
     res = challenge(req)
