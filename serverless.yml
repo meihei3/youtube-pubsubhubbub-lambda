@@ -30,17 +30,17 @@ functions:
     handler: handler.get_handler
     events:
       - httpApi:
-        # /callback-[a random URL-safe text string(32bytes)]
-        path: /callback-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-        method: get
+          # /callback-[a random URL-safe text string(32bytes)]
+          path: /callback-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          method: get
 
   notify:
     handler: handler.post_handler
     events:
       - httpApi:
-        # /callback-[a random URL-safe text string(32bytes)]
-        path: /callback-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-        method: post
+          # /callback-[a random URL-safe text string(32bytes)]
+          path: /callback-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+          method: post
 
 plugins:
   - serverless-python-requirements
