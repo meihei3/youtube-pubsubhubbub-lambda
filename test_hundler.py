@@ -9,23 +9,14 @@ import os
 load_dotenv()
 
 # 検証用のキー
-VERIFY_TOKEN: str = os.environ["PuSH_verify_token"]
 HMAC_SECRET: str = os.environ["PuSH_hmac_secret"]
 
 
 def test_challenge():
     challenge = "challenge"
     expected = Response(200, challenge)
-    actual = handler.challenge(RequestChalenge(VERIFY_TOKEN, challenge))
+    actual = handler.challenge(RequestChalenge(challenge))
     assert expected == actual
-
-    expected = 404
-    actual = handler.challenge(RequestChalenge("hoge", challenge))
-    assert expected == actual.statusCode
-
-    expected = 404
-    actual = handler.challenge(RequestChalenge("", challenge))
-    assert expected == actual.statusCode
 
 
 def test_validate_hmac():

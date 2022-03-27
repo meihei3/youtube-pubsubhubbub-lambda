@@ -8,7 +8,6 @@ import hmac
 import logging
 import os
 import re
-import secrets
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -24,12 +23,10 @@ XML_NAMESPACE = {
 
 # 検証用のキー
 try:
-    VERIFY_TOKEN: str = os.environ["PuSH_verify_token"]
     HMAC_SECRET: str = os.environ["PuSH_hmac_secret"]
 except KeyError:
     from dotenv import load_dotenv
     load_dotenv()
-    VERIFY_TOKEN: str = os.environ["PuSH_verify_token"]
     HMAC_SECRET: str = os.environ["PuSH_hmac_secret"]
 except:
     logger.error("environment variable not found")
@@ -38,7 +35,6 @@ except:
 
 @dataclass(frozen=True)
 class RequestChalenge:
-    verifyToken: str
     challenge: str
 
 
@@ -70,9 +66,6 @@ def challenge(req: RequestChalenge) -> Response:
     """
     challengeのロジック部分
     """
-    if not secrets.compare_digest(req.verifyToken, VERIFY_TOKEN):
-        return Response(statusCode=404, body='{"message":"Not Found"}')
-
     return Response(statusCode=200, body=req.challenge)
 
 
@@ -142,8 +135,7 @@ def get_handler(event, context):
     """
     logger.info(event)    # for debug
     params: dict = event.get("queryStringParameters", "")
-    req = RequestChalenge(verifyToken=params.get("hub.verify_token", ""),
-                          challenge=params.get("hub.challenge", ""))
+    req = RequestChalenge(challenge=params.get("hub.challenge", ""))
 
     res = challenge(req)
 

@@ -23,7 +23,6 @@ provider:
   region: ap-northeast-1
   logRetentionInDays: 30
   environment:
-    PuSH_verify_token: ${env:PuSH_verify_token}
     PuSH_hmac_secret: ${env:PuSH_hmac_secret}
 
 functions:
@@ -31,15 +30,17 @@ functions:
     handler: handler.get_handler
     events:
       - httpApi:
-          path: /hub
-          method: get
+        # /callback-[a random URL-safe text string(32bytes)]
+        path: /callback-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        method: get
 
   notify:
     handler: handler.post_handler
     events:
       - httpApi:
-          path: /hub
-          method: post
+        # /callback-[a random URL-safe text string(32bytes)]
+        path: /callback-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        method: post
 
 plugins:
   - serverless-python-requirements
